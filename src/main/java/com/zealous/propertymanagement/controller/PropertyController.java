@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v2")
 public class PropertyController {
@@ -25,4 +27,40 @@ public class PropertyController {
         ResponseEntity<PropertyDTO> responseEntity = new ResponseEntity<>(propertyDTO, HttpStatus.CREATED);
         return responseEntity;
     }
+
+    @GetMapping("/properties")
+    public ResponseEntity<List<PropertyDTO>> getAllProperties(){
+        List<PropertyDTO> propertyList = propertyService.getAllProperties();
+        ResponseEntity<List<PropertyDTO>> responseEntity = new ResponseEntity<>(propertyList,HttpStatus.OK);
+        return responseEntity;
+    }
+
+    @PutMapping("/property/{propertyId}")
+    public ResponseEntity<PropertyDTO> updateProperty(@RequestBody PropertyDTO propertyDTO, @PathVariable Long propertyId){
+        propertyDTO = propertyService.updateProperty(propertyDTO, propertyId);
+        ResponseEntity<PropertyDTO> responseEntity = new ResponseEntity<>(propertyDTO, HttpStatus.OK);
+        return responseEntity;
+    }
+
+    @PatchMapping("/property/update-description/{propertyId}")
+    public ResponseEntity<PropertyDTO> updatePropertyUpdateDesctiption(@RequestBody PropertyDTO propertyDTO, @PathVariable Long propertyId){
+        propertyDTO = propertyService.updatePropertyUpdateDescription(propertyDTO,propertyId);
+        ResponseEntity<PropertyDTO> responseEntity = new ResponseEntity<>(propertyDTO, HttpStatus.OK);
+        return responseEntity;
+    }
+
+    @PatchMapping("/property/update-price/{propertyId}")
+    public ResponseEntity<PropertyDTO> updatePropertyUpdatePrice(@RequestBody PropertyDTO propertyDTO, @PathVariable Long propertyId){
+        propertyDTO = propertyService.updatePropertyUpdatePrice(propertyDTO,propertyId);
+        ResponseEntity<PropertyDTO> responseEntity = new ResponseEntity<>(propertyDTO, HttpStatus.OK);
+        return responseEntity;
+    }
+
+    @DeleteMapping("/property/delete/{propertyId}")
+    public ResponseEntity deleteProperty(@PathVariable Long propertyId){
+        propertyService.deleteProperty(propertyId);
+        ResponseEntity responseEntity = new ResponseEntity(null, HttpStatus.NO_CONTENT);
+        return responseEntity;
+    }
+
 }
