@@ -1,0 +1,3 @@
+git remote add origin https://github.com/UserName/property-management.git
+git remote set-url origin https://UserName:token@github.com/UserName/property-management.git
+git push --set-upstream origin main
