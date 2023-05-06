@@ -1,5 +1,7 @@
 package com.zealous.propertymanagement.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -13,18 +15,31 @@ import java.util.List;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<List<ErrorModel>> handleBusinessException(BusinessException businessException){
-        System.out.println("BusinessException is thrown");
+
+        for(ErrorModel em : businessException.getErrors()){
+            logger.error("FieldValidation exception raised {} - {}",em.getCode(),em.getMessage());
+        }
         return new ResponseEntity<List<ErrorModel>>(businessException.getErrors(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<ErrorModel>> handleFieldValidation(MethodArgumentNotValidException exception){
+
+        logger.trace("This is trace log");
+        logger.debug("This is debug log");
+        logger.info("This is info log");
+        logger.warn("This is warn log");
+        logger.error("This is error log");
+
         List<ErrorModel> errorModelList = new ArrayList<>();
         ErrorModel errorModel = null;
         List<FieldError> fieldErrorList = exception.getBindingResult().getFieldErrors();
         for (FieldError fe: fieldErrorList){
+            logger.error("FieldValidation exception raised {} - {}",fe.getField(),fe.getDefaultMessage());
             errorModel = new ErrorModel();
             errorModel.setCode(fe.getField());
             errorModel.setMessage(fe.getDefaultMessage());
