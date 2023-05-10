@@ -2,9 +2,11 @@ package com.zealous.propertymanagement.service.impl;
 
 import com.zealous.propertymanagement.converter.UserConverter;
 import com.zealous.propertymanagement.dto.UserDTO;
+import com.zealous.propertymanagement.entity.AddressEntity;
 import com.zealous.propertymanagement.entity.UserEntity;
 import com.zealous.propertymanagement.exception.BusinessException;
 import com.zealous.propertymanagement.exception.ErrorModel;
+import com.zealous.propertymanagement.repository.AddressRepository;
 import com.zealous.propertymanagement.repository.UserRepository;
 import com.zealous.propertymanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Autowired
     private UserConverter userConverter;
@@ -37,6 +42,17 @@ public class UserServiceImpl implements UserService {
         }
         UserEntity userEntity = userConverter.convertDTOtoEntity(userDTO);
         userEntity = userRepository.save(userEntity);
+
+        AddressEntity addressEntity = new AddressEntity();
+        addressEntity.setHouseNo(userDTO.getHouseNo());
+        addressEntity.setCity(userDTO.getCity());
+        addressEntity.setPostalCode(userDTO.getPostalCode());
+        addressEntity.setStreet(userDTO.getStreet());
+        addressEntity.setCountry(userDTO.getCountry());
+        addressEntity.setUserEntity(userEntity);
+
+        addressRepository.save(addressEntity);
+
         userDTO = userConverter.convertEntitytoDTO(userEntity);
         return userDTO;
     }
