@@ -1,3 +1,6 @@
 http://localhost:8080/v3/api-docs
 http://localhost:8080/swagger-ui/index.html
 http://localhost:8080/actuator
+
+For * -> One relationship, default is FetchType.Eager, while getting parent data also get child entity data
+For * -> Many relationship, default is FetchType.Lazy, while getting parent data but don't fetch child entity data
