@@ -37,7 +37,7 @@ public class PropertyController {
 
     @GetMapping("/properties/users/{userId}")
     public ResponseEntity<List<PropertyDTO>> getAllPropertiesForUser(@PathVariable("userId") Long userId){
-        List<PropertyDTO> propertyList = propertyService.getAllProperties();
+        List<PropertyDTO> propertyList = propertyService.getAllPropertiesForUser(userId);
         ResponseEntity<List<PropertyDTO>> responseEntity = new ResponseEntity<>(propertyList,HttpStatus.OK);
         return responseEntity;
     }
